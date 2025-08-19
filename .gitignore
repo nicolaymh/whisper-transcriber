@@ -1,0 +1,23 @@
+# === Carpetas privadas (no subir audios ni transcripciones) ===
+audios/
+transcripciones/
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+
+# === Entornos virtuales ===
+.venv/
+venv/
+env/
+
+# === Archivos de sistema ===
+.DS_Store
+Thumbs.db
+
+# === VSCode ===
+.vscode/
