@@ -4,6 +4,48 @@ Transcriptor **robusto** de múltiples audios a texto y subtítulos usando [`fas
 
 ---
 
+## 🚀 Instalación y Primer Uso
+
+### Primera vez (configuración inicial)
+1. Clona el repo:
+   ```bash
+   git clone git@github.com:nicolaymh/whisper-transcriber.git
+   cd whisper-transcriber
+   ```
+
+2. Crea el entorno e instala dependencias:
+   - Con **GPU NVIDIA**:
+     ```bash
+     make setup
+     make install-gpu
+     make install-cudnn
+     ```
+   - Solo **CPU**:
+     ```bash
+     make setup
+     make install-cpu
+     ```
+
+3. Coloca tus audios en la carpeta:
+   ```bash
+   audios/
+   ```
+
+4. Ejecuta la transcripción:
+   ```bash
+   make run
+   ```
+
+### Uso diario (después de la primera vez)
+```bash
+cd whisper-transcriber
+make run
+```
+
+Los resultados se generan en `transcripciones/` como `.txt` y `.srt`.
+
+---
+
 ## 🚀 Características clave
 - **Batch**: procesa todos los audios dentro de `audios/` y guarda resultados en `transcripciones/`.
 - **Modelos Whisper**: intenta `large-v3` y, si falla, retrocede a `large-v2` automáticamente.
@@ -15,47 +57,33 @@ Transcriptor **robusto** de múltiples audios a texto y subtítulos usando [`fas
 
 ---
 
-## 📦 Requisitos e instalación
+## 📦 Requisitos
+
+Antes de usar el transcriptor asegúrate de tener instalado:
 
 ### 1) Python
-- **Python 3.10+** recomendado.
+- **Python 3.10+** recomendado (el Makefile creará un entorno virtual `.venv/` con todas las librerías necesarias).
 
-### 2) Librerías Python
-Instala la dependencia principal directamente:
-
-```bash
-pip install faster-whisper
-```
-
-> `faster-whisper` instala internamente `ctranslate2`, `tokenizers`, etc. Si tu entorno no tiene **PyTorch** y deseas soporte para GPU (detección de CUDA y limpieza de caché), instala PyTorch según tu plataforma. Para CPU, **no es obligatorio** instalar PyTorch; el script seguirá funcionando.
-
-**Opcional – PyTorch (GPU CUDA 12.x)**  
-Si quieres soporte CUDA:
-```bash
-# CUDA 12.1 (ejemplo oficial de PyTorch)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-```
-
-**CPU únicamente (sin CUDA)**
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-```
-
-> Si no instalas `torch`, el script seguirá funcionando porque hace comprobaciones seguras. Solo perderás la limpieza explícita de caché CUDA.
-
-### 3) FFmpeg
-Necesitas **FFmpeg** para soportar múltiples formatos de audio.
+### 2) FFmpeg
+Necesario para soportar múltiples formatos de audio.
 
 - **Ubuntu/Debian**
   ```bash
   sudo apt update && sudo apt install -y ffmpeg
   ```
 - **Windows**
-  - Descarga desde <https://ffmpeg.org/download.html>, agrega `ffmpeg.exe` a tu **PATH**.
+  Descarga desde <https://ffmpeg.org/download.html> y agrega `ffmpeg.exe` a tu **PATH**.
 - **macOS (Homebrew)**
   ```bash
   brew install ffmpeg
   ```
+
+### 3) Dependencias Python
+No es necesario instalarlas manualmente.  
+El **Makefile crea el entorno virtual y gestiona todas las dependencias** (`torch`, `faster-whisper`, `cudnn`, etc.).
+
+> ⚡ **Nota**: No necesitas ejecutar `source .venv/bin/activate`.  
+> Cada comando `make` activa y usa el entorno virtual automáticamente.
 
 ---
 
@@ -209,7 +237,7 @@ Se aplica un **orden natural** para que `1_intro`, `2_parte`, `10_extra` queden 
 - Asegúrate de tener FFmpeg instalado y en el `PATH` del sistema.
 
 **3) “Out of memory” (VRAM)**  
-- Cambia a un modelo más pequeño (`medium`, `small`, etc.).
+- Cambia a un modelo más pequeño (`medium`, `small`, etc.`).
 - Cierra otros procesos que usen GPU.
 - Reduce simultaneidad (no aplicable si procesas 1 archivo a la vez).
 
